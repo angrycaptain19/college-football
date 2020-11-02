@@ -124,15 +124,11 @@ def _get_game_team_stats(game_id):
     WHERE game_id = %s
   '''
   params = (game_id,)
-  result = {}
-  for row in cfb.db.query(sql, params):
-    result[row[0]] = {
+  return {row[0]: {
       'points': row[1],
       'total_yards': row[2],
       'top': row[3],
-    }
-
-  return result
+    } for row in cfb.db.query(sql, params)}
 
 
 def lookup(year=None, week=None, either_team=None, away_team=None, home_team=None):
@@ -328,9 +324,7 @@ def get_prediction(game_id, prediction_model, version=0):
       version = %s
   '''
   params = (game_id, prediction_model.value, version)
-  result = cfb.db.query(sql, params)[0]
-
-  return result
+  return cfb.db.query(sql, params)[0]
 
 
 def save_predictions(prediction_data, prediction_model, version=0):

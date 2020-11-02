@@ -24,8 +24,8 @@ def evaluate(year, week):
         game = cfb.game.Game(game_id)
         away_points = game.team_stats[cfb.game.Game(game_id).game_info['away_team']]['points']
         home_points = game.team_stats[cfb.game.Game(game_id).game_info['home_team']]['points']
-        for model in model_predictions:
-            if game_id in model_predictions[model]:
+        for model, value in model_predictions.items():
+            if game_id in value:
                 predicted_away, predicted_home = model_predictions[model][game_id]
                 wl_correct = (home_points > away_points) == (predicted_home > predicted_away)
                 if wl_correct:
@@ -85,9 +85,9 @@ def evaluate_whole_season(ctx, year):
     for week in range(3, 15):
         week_evaluations = ctx.invoke(evaluate, year=year, week=week)
         print(week_evaluations.keys())
-        for m in model_evaluations:
+        for m, value in model_evaluations.items():
             for k in model_evaluations[m]:
-                model_evaluations[m][k] += week_evaluations[m][k]
+                value[k] += week_evaluations[m][k]
 
     print(model_evaluations)
 

@@ -8,11 +8,9 @@ class _WinsOverX(base.Feature):
 
   @property
   def value(self):
-    val = 0
-    for game in cfb.game.team_games_of_season(self.year, self.team_id):
-      if game.winner() == self.team_id and self.condition(game.loser()):
-        val += 1
-    return val
+    return sum(1
+               for game in cfb.game.team_games_of_season(self.year, self.team_id)
+               if game.winner() == self.team_id and self.condition(game.loser()))
 
   def condition(self, opponent_id):
     """Stub to implement the condition that defines which wins are quality."""

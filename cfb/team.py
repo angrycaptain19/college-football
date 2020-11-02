@@ -86,14 +86,14 @@ def add_nickname(team_id, nickname):
 
 
 def add_external_id(team_id, data_source, external_id):
+  if not lookup_external_id(data_source, external_id):
     sql = """
         INSERT IGNORE INTO team_id_map (data_source_id, external_id, team_id)
         VALUES (
             (SELECT data_source_id FROM data_source WHERE name = %s),
                 %s, %s)
     """
-    if not lookup_external_id(data_source, external_id):
-        result = cfb.db.query(sql, (data_source, external_id, team_id))
+    result = cfb.db.query(sql, (data_source, external_id, team_id))
 
 
 def _canonicalize_nickname(nickname):

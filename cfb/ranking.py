@@ -52,13 +52,12 @@ def compare_ranking_ranks(ranking1, ranking2):
   Order doesn't matter - will always return a nonnegative value.
 
   """
-  diff = 0
   ranking_map1 = {team_id: rank for team_id, rank, _ in ranking1.get_teams()}
   ranking_map2 = {team_id: rank for team_id, rank, _ in ranking2.get_teams()}
 
-  for team_id, rank in ranking_map1.items():
-    diff += abs(rank - ranking_map2.get(team_id, len(ranking_map2)))
-
+  diff = sum(
+      abs(rank - ranking_map2.get(team_id, len(ranking_map2)))
+      for team_id, rank in ranking_map1.items())
   # account for any teams in the second ranking that weren't in the first
   for team_id, rank in ranking_map2.items():
     if team_id not in ranking_map1:
